@@ -8,18 +8,20 @@ from datamodule.data_module import DataModule
 from lightning import ModelModule
 from pytorch_lightning import seed_everything, Trainer
 from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
-from pytorch_lightning.plugins import DDPPlugin
+from pytorch_lightning.strategies import DDPStrategy
+from pytorch_lightning.loggers import TensorBoardLogger
 
+from omegaconf import DictConfig, OmegaConf
 
 # Set environment variables and logger level
 os.environ["WANDB_SILENT"] = "true"
 logging.basicConfig(level=logging.WARNING)
 
 
-@hydra.main(config_path="conf", config_name="config")
-def main(cfg):
+@hydra.main(config_path="conf", config_name="avsrconfig_4s")
+def main(cfg: DictConfig) -> None:
     seed_everything(42, workers=True)
-    cfg.slurm_job_id = os.environ["SLURM_JOB_ID"]
+    # cfg.slurm_job_id = os.environ["SLURM_JOB_ID"]
     cfg.gpus = torch.cuda.device_count()
 
     checkpoint = ModelCheckpoint(
@@ -34,16 +36,19 @@ def main(cfg):
     callbacks = [checkpoint, lr_monitor]
 
     # Configure logger
-    wandb_logger = hydra.utils.instantiate(cfg.logger) if cfg.log_wandb else None
+    if cfg.log_wandb:
+        logger = hydra.utils.instantiate(cfg.logger)
+    else:
+        logger = TensorBoardLogger(save_dir='tblog', name=cfg.logger.name)
 
     # Set modules and trainer
     modelmodule = ModelModule(cfg)
     datamodule = DataModule(cfg)
     trainer = Trainer(
         **cfg.trainer,
-        logger=wandb_logger,
+        logger=logger,
         callbacks=callbacks,
-        strategy=DDPPlugin(find_unused_parameters=False) if cfg.gpus > 1 else None
+        strategy=DDPStrategy(find_unused_parameters=False) if cfg.gpus > 1 else None
     )
 
     # Training and testing
@@ -58,7 +63,7 @@ def main(cfg):
             cfg.ckpt_path = ensemble(cfg)
             cfg.transfer_frontend = False
             cfg.gpus = cfg.trainer.gpus = cfg.trainer.num_nodes = 1
-            trainer = Trainer(**cfg.trainer, logger=wandb_logger, strategy=None)
+            trainer = Trainer(**cfg.trainer, logger=logger, strategy=None)
             modelmodule.model.load_state_dict(
                 torch.load(cfg.ckpt_path, map_location=lambda storage, loc: storage)
             )

@@ -65,6 +65,7 @@ class DataModule(LightningDataModule):
 
     def train_dataloader(self):
         ds_args = self.cfg.data.dataset
+        print(ds_args)
         train_ds = AVDataset(
             root=ds_args.root,
             label_path=os.path.join(
@@ -74,6 +75,8 @@ class DataModule(LightningDataModule):
             modality=self.cfg.data.modality,
             audio_transform=AudioTransform("train"),
             video_transform=VideoTransform("train"),
+            max_frame = self.cfg.data.max_frames,
+            max_length= self.cfg.data.max_length,
         )
         sampler = ByFrameCountSampler(train_ds, self.cfg.data.max_frames)
         if self.total_gpus > 1:
@@ -91,6 +94,8 @@ class DataModule(LightningDataModule):
             modality=self.cfg.data.modality,
             audio_transform=AudioTransform("val"),
             video_transform=VideoTransform("val"),
+            max_frame = self.cfg.data.max_frames_val,
+            max_length= self.cfg.data.max_length,
         )
         sampler = ByFrameCountSampler(
             val_ds, self.cfg.data.max_frames_val, shuffle=False
@@ -110,6 +115,8 @@ class DataModule(LightningDataModule):
                 "test", snr_target=self.cfg.decode.snr_target
             ),
             video_transform=VideoTransform("test"),
+            max_frame = self.cfg.data.max_frames,
+            max_length= self.cfg.data.max_length,
         )
         dataloader = torch.utils.data.DataLoader(dataset, batch_size=None)
         return dataloader

@@ -1,0 +1,7 @@
+defaults:
+  - _self_
+root: "/work101/cchen/data/audio-visual/"
+label_dir: "cncvs_autoavsr/text"
+train_file: "cncvs_train.csv"
+val_file: "cncvs_valid.csv"
+test_file: "cncvs_test.csv"

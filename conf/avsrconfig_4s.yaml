@@ -1,0 +1,35 @@
+
+exp_dir: /work101/cchen/code/auto_avsr/exp/
+exp_name: cncvs_4s_3/
+num_workers: 12
+gpus: 1
+slurm_job_id: 1
+train: True
+log_wandb: False
+infer_path:
+ckpt_path:
+transfer_frontend:
+
+defaults:
+  - checkpoint: last_k
+  - data: default
+  - logger: cassini
+  - model: default
+  - optimizer: adamw
+  - trainer: train
+  - decode: default
+
+checkpoint:
+  save_top_k: 100
+
+trainer:
+  num_nodes: 1
+
+optimizer:
+  lr: 2e-4
+
+data:
+  max_frames: 1000
+  max_length: 100
+  max_frames_val: 100
+

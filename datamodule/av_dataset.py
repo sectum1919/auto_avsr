@@ -45,30 +45,41 @@ class AVDataset(torch.utils.data.Dataset):
         audio_transform,
         video_transform,
         rate_ratio=640,
+        max_frame=1800,
+        max_length=100,
     ):
 
         self.root = root
 
         self.modality = modality
         self.rate_ratio = rate_ratio
+        self.max_frame = int(max_frame)
+        self.max_length = int(max_length)
 
         self.list = self.load_list(label_path)
 
         self.audio_transform = audio_transform
         self.video_transform = video_transform
+        
 
     def load_list(self, label_path):
         paths_counts_labels = []
         for path_count_label in open(label_path).read().splitlines():
             dataset_name, rel_path, input_length, token_id = path_count_label.split(",")
-            paths_counts_labels.append(
-                (
-                    dataset_name,
-                    rel_path,
-                    int(input_length),
-                    torch.tensor([int(_) for _ in token_id.split()]),
-                )
-            )
+            if int(input_length) < self.max_frame and int(input_length) < self.max_length:
+                path = os.path.join(self.root, dataset_name, rel_path)
+                if os.path.exists(path):
+                    token = [int(_) for _ in token_id.split()]
+                    if len(token) < 1:
+                        continue
+                    paths_counts_labels.append(
+                        (
+                            dataset_name,
+                            rel_path,
+                            int(input_length),
+                            torch.tensor([int(_) for _ in token_id.split()]),
+                        )
+                    )
         return paths_counts_labels
 
     def __getitem__(self, idx):
