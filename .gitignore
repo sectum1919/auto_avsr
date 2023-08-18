@@ -8,3 +8,5 @@ outputs/
 *.tar
 .DS_Store
 exp/
+*.pth
+

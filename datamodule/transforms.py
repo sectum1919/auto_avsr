@@ -161,7 +161,11 @@ class TextTransform:
         return torch.tensor(list(map(int, token_ids)))
 
     def post_process(self, token_ids):
-        token_ids = token_ids[token_ids != -1]
+        valid_ids = []
+        for token in token_ids:
+            if token != -1:
+                valid_ids.append(token)
+        token_ids = valid_ids
         text = self._ids_to_str(token_ids, self.token_list)
         text = text.replace("\u2581", " ").strip()
         return text

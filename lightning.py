@@ -12,6 +12,9 @@ from espnet.nets.scorers.length_bonus import LengthBonus
 from pytorch_lightning import LightningModule
 
 
+def compute_char_level_distance(seq1, seq2):
+    return torchaudio.functional.edit_distance(seq1, seq2)
+
 def compute_word_level_distance(seq1, seq2):
     return torchaudio.functional.edit_distance(
         seq1.lower().split(), seq2.lower().split()
@@ -45,7 +48,14 @@ class ModelModule(LightningModule):
                 }
                 self.model.encoder.frontend.load_state_dict(tmp_ckpt)
             else:
-                self.model.load_state_dict(ckpt)
+                if self.cfg.remove_ctc:
+                    dict_new = {}
+                    for key, value in ckpt.items():
+                        if key not in ['decoder.embed.0.weight', 'decoder.output_layer.weight', 'decoder.output_layer.bias', 'ctc.ctc_lo.weight', 'ctc.ctc_lo.bias']:
+                            dict_new[key] = value
+                    self.model.load_state_dict(dict_new, strict=False)
+                else:
+                    self.model.load_state_dict(ckpt)
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(
@@ -97,8 +107,10 @@ class ModelModule(LightningModule):
         token_id = sample["target"]
         actual = self.text_transform.post_process(token_id)
 
-        self.total_edit_distance += compute_word_level_distance(actual, predicted)
-        self.total_length += len(actual.split())
+        self.total_edit_distance += compute_char_level_distance(actual, predicted)
+        self.total_length += len(actual)
+        if sample_idx % 100 == 1:
+            print(f'{sample_idx + 1} utt, avgcer = {self.total_edit_distance / self.total_length}')
         return
 
     def _step(self, batch, batch_idx, step_type):
@@ -149,10 +161,10 @@ class ModelModule(LightningModule):
         self.total_length = 0
         self.total_edit_distance = 0
         self.text_transform = TextTransform()
-        self.beam_search = get_beam_search_decoder(self.model, self.token_list)
+        self.beam_search = get_beam_search_decoder(self.model, self.token_list, ctc_weight=0.5)
 
     def on_test_epoch_end(self):
-        self.log("wer", self.total_edit_distance / self.total_length)
+        self.log("cer", self.total_edit_distance / self.total_length)
 
 
 def get_beam_search_decoder(
