@@ -12,9 +12,6 @@ from espnet.nets.lm_interface import dynamic_import_lm
 from espnet.nets.pytorch_backend.e2e_asr_transformer import E2E
 from espnet.nets.scorers.length_bonus import LengthBonus
 from pytorch_lightning import LightningModule
-from pytorch_lightning.callbacks import BasePredictionWriter
-import os
-import torchmetrics
 
 
 def compute_char_level_distance(seq1, seq2):
@@ -215,62 +212,3 @@ def get_beam_search_decoder(
         token_list=token_list,
         pre_beam_score_key=None if ctc_weight == 1.0 else "decoder",
     )
-
-
-class CustomWriterVSR(BasePredictionWriter):
-    def __init__(self, output_dir, write_interval, data_config):
-        super().__init__(write_interval)
-        self.output_dir = output_dir
-        self.data_config = data_config
-        self.cer = torchmetrics.CharErrorRate()
-        self.tmpcer = torchmetrics.CharErrorRate()
-
-    def write_on_epoch_end(self, trainer, pl_module, predictions, batch_indices):
-        
-        save_text = os.path.join(self.output_dir, f"predictions.json")
-        
-        infos = {
-            'utt_id': [],
-            'ref': [],
-            'hypo': [],
-        }
-        for predict in predictions[0]:
-            for key, value in predict.items():
-                if key == 'hypo' or key == 'ref':
-                    infos[key].append(value.permute(0,2,1))# B C T
-                elif 'text' in key:
-                    cont = self.text_transform.de_tokenize([int(c) for c in value[0].strip(' ').split(' ')])
-                    infos[key].append(cont)
-                    # print(key, cont)
-                else:
-                    infos[key].append(value[0])
-                    # print(key, value)
-        import numpy as np
-        np.save(save_file, infos)
-        print(f'predicted files saved in {os.path.abspath(save_file)}')
-        # write text
-        text_infos = {
-            'utt_id': [],
-            'text_target': [],
-            'text_pred': [],
-            'cer': [],
-        }
-        import json
-        self.cer.reset()
-        for i, _ in enumerate(infos['text_target']):
-            uttid = infos['utt_id'][i]
-            text_infos['utt_id'].append(uttid)
-            text_target = infos['text_target'][i]
-            text_pred = infos['text_pred'][i]
-            text_infos['text_target'].append(text_target)
-            text_infos['text_pred'].append(text_pred)
-            self.cer.update(text_pred, text_target)
-            self.tmpcer.update(text_pred, text_target)
-            text_infos['cer'].append(self.tmpcer.compute().item())
-            self.tmpcer.reset()
-        json.dump(text_infos, open(save_text, 'w'), indent=4, ensure_ascii=False)
-        print(self.cer.errors, self.cer.total, self.cer.compute())
-        print(f'predicted texts saved in {os.path.abspath(save_text)}')
-        
-    def on_test_epoch_end(self, trainer: Trainer, pl_module: LightningModule) -> None:
-        return super().on_test_epoch_end(trainer, pl_module)

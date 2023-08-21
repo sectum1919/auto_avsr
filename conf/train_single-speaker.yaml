@@ -1,3 +1,6 @@
+code_root_dir: /work101/cchen/code/baseline/
+data_root_dir: /work101/cchen/data/CNVSRC/
+
 checkpoint:
   save_top_k: 5
 data:
@@ -6,7 +9,7 @@ data:
   max_frames: 1000
   max_frames_val: 750
   dataset:
-    root: /work104/cchen/data/audio-visual/
+    root: ${data_root_dir}
     label_dir: single-speaker/
     train_file: train.csv
     val_file: valid.csv
@@ -101,7 +104,8 @@ trainer:
 decode:
   name: default
   snr_target: 999999
-exp_dir: /work104/cchen/VSR/auto_avsr/exp/
+  
+exp_dir: ${code_root_dir}/exp/
 exp_name: single-speaker/
 num_workers: 8
 gpus: 1
@@ -109,6 +113,6 @@ slurm_job_id: 1
 train: true
 log_wandb: false
 infer_path: null
-ckpt_path: /work104/cchen/VSR/baseline/pretrained_models/model_avg_last10_cncvs_4s_30s.pth
+ckpt_path: ${code_root_dir}/pretrained_models/model_avg_last10_cncvs_4s_30s.pth
 transfer_frontend: false
 remove_ctc: true

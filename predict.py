@@ -83,45 +83,27 @@ def get_beam_search_decoder(
         pre_beam_score_key=None if ctc_weight == 1.0 else "decoder",
     )
 
-
-def load_target_utt():
-    uid2content = {}
-    import json
-    all_spk_infos = json.load(open('/work104/cchen/VSR/auto_avsr/preparation/ncmmsc_everything_mapping.json'))
-    for spk, infos in all_spk_infos.items():
-        for info in infos:
-            uid, newuid, _, _, target = info
-            uid2content[uid] = target
-    return uid2content
-
-
-def filelist(listcsv, uid2content, text_transform, cfg):
+def filelist(listcsv, text_transform, cfg):
     fns = []
     lines = []
+    uid2content = {}
     with open(listcsv) as fp:
         lines = fp.readlines()
     root = cfg.data.dataset.root + lines[0].split(',')[0]
     for line in lines:
         _, vfn, _, tokens = line.strip().split(',')
-        if "SPEAKER" in vfn:
-            uid = os.path.basename(vfn)[1:-4]
-        elif 'ncmmsc_vlog' in vfn:
-            uid = os.path.basename(vfn)[:-4]
-        else:
-            uid = os.path.basename(vfn)[:-4]
+        uid = os.path.basename(vfn)[:-4]
         fn = f"{root}/{vfn.replace('//', '/')}"
         uid2content[uid] = text_transform.post_process([int(t) for t in tokens.split(' ')])
         fns.append((fn,uid))
     return fns, uid2content
         
 
-@hydra.main(config_path="conf", config_name="test_single100")
+@hydra.main(config_path="conf", config_name="test_multi-speaker")
 def main(cfg):
-    device = 'cuda:0'
+    device = cfg.device
     cer = torchmetrics.CharErrorRate()
     tmpcer = torchmetrics.CharErrorRate()
-    # Set modules and trainer
-    # load cfg.ckpt_path when init
     text_transform = TextTransform()
     token_list = text_transform.token_list
     model = E2E(len(token_list), cfg.model.visual_backbone).to(device)
@@ -142,11 +124,7 @@ def main(cfg):
         model.load_state_dict(state_dict, strict=True)
 
     model.eval()
-    target_content = load_target_utt()
-    fns, target_content = filelist(cfg.filelist_csv, target_content, text_transform, cfg)
-    import random
-    random.seed(1208)
-    random.shuffle(fns)
+    fns, target_content = filelist(cfg.filelist_csv, text_transform, cfg)
     infos = {}
     beam_search = get_beam_search_decoder(model, token_list, ctc_weight=0.3,)
     for i, (fn, uid) in enumerate(fns):
@@ -167,7 +145,7 @@ def main(cfg):
         print(f"{uid}-targ: {target}")
         tmpcer.update(transcript, target)
         print(f'{i+1}/{len(fns)} cer:{tmpcer.compute().item()*100}%')
-        print(f'{i+1}/{len(fns)}  avg_cer:{cer.compute().item()*100}%')
+        print(f'{i+1}/{len(fns)} avg_cer:{cer.compute().item()*100}%')
         tmpcer.reset()
         infos[uid] = {
             'pred': transcript,

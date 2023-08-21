@@ -21,17 +21,6 @@
 
 This is the repository of [Auto-AVSR: Audio-Visual Speech Recognition with Automatic Labels](https://arxiv.org/abs/2303.14307), which is the successor of [End-to-End Audio-Visual Speech Recognition with Conformers](https://arxiv.org/abs/2102.06657). This repository contains both training code and pre-trained models for end-to-end audio-only and visual-only speech recognition (lipreading). Additionally, we offer a tutorial that will walk you through the process of training an ASR/VSR model using your own datasets.
 
-
-## Demo
-
-<div align="center">
-
-<img src='doc/autoavsr_demo.gif' title='autoavsr_demo.gif' style='max-width:320px'></img>
-
-</div>
-
-You can check out our [gradio demo](https://huggingface.co/spaces/mpc001/auto_avsr) below to inference your video (English) with our audio-only, visual-only and audio-visual speech recognition models.
-
 ## Preparing the environment
 
 1. Clone the repository and navigate to it:

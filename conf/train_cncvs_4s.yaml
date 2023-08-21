@@ -1,3 +1,6 @@
+code_root_dir: /work101/cchen/code/baseline/
+data_root_dir: /work101/cchen/data/CNVSRC/
+
 checkpoint:
   save_top_k: 75
 data:
@@ -6,7 +9,7 @@ data:
   max_frames: 1000
   max_frames_val: 100
   dataset:
-    root: /work104/cchen/data/audio-visual/
+    root: ${data_root_dir}
     label_dir: cncvs/
     train_file: train.csv
     val_file: valid.csv
@@ -15,7 +18,7 @@ data:
 logger:
   _target_: pytorch_lightning.loggers.WandbLogger
   log_model: true
-  name: cncvs_4s/
+  name: ${exp_name}
   offline: false
   project: auto_avsr
   mode: online
@@ -101,10 +104,11 @@ trainer:
 decode:
   name: default
   snr_target: 999999
-exp_dir: auto_avsr/
+
+exp_dir: ${code_root_dir}/exp/
 exp_name: cncvs_4s/
-num_workers: 6
-gpus: 6
+num_workers: 8
+gpus: 1
 slurm_job_id: 1
 train: true
 log_wandb: false

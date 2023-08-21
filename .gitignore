@@ -9,4 +9,5 @@ outputs/
 .DS_Store
 exp/
 *.pth
+predict/
 
