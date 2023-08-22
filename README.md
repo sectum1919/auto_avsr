@@ -34,6 +34,8 @@ pip install -r reqs.txt
 
 3. Download and preprocess the dataset. See the instructions in the [preparation](./preparation) folder.
 
+4. Download the [models](#Model-zoo) into path [pretrained_models/](pretrained_models/)
+
 ## Logging
 
 We use tensorboard as the logger.

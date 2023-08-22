@@ -101,6 +101,18 @@ def filelist(listcsv, text_transform, cfg):
 
 @hydra.main(config_path="conf", config_name="test_multi-speaker")
 def main(cfg):
+    if not os.path.exists(cfg.data_root_dir):
+        print('cfg.data_root_dir doesn\'t exist!')
+        raise RuntimeError
+    if not os.path.exists(cfg.code_root_dir):
+        print('should set cfg.code_root_dir before running')
+        raise RuntimeError
+    if os.path.dirname(__file__)+'/' != cfg.code_root_dir \
+        and \
+        os.path.dirname(__file__) != cfg.code_root_dir:
+        print('should set cfg.code_root_dir as current path')
+        print(os.path.dirname(__file__))
+        raise RuntimeError
     device = cfg.device
     cer = torchmetrics.CharErrorRate()
     tmpcer = torchmetrics.CharErrorRate()

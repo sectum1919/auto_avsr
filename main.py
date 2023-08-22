@@ -22,6 +22,19 @@ logging.basicConfig(level=logging.WARNING)
 def main(cfg: DictConfig) -> None:
     seed_everything(42, workers=True)
     # cfg.slurm_job_id = os.environ["SLURM_JOB_ID"]
+    if not os.path.exists(cfg.data_root_dir):
+        print('cfg.data_root_dir doesn\'t exist!')
+        raise RuntimeError
+    if not os.path.exists(cfg.code_root_dir):
+        print('should set cfg.code_root_dir before running')
+        raise RuntimeError
+    if os.path.dirname(__file__)+'/' != cfg.code_root_dir \
+        and \
+        os.path.dirname(__file__) != cfg.code_root_dir:
+        print('should set cfg.code_root_dir as current path')
+        print(os.path.dirname(__file__))
+        raise RuntimeError
+    
     cfg.gpus = torch.cuda.device_count()
 
     checkpoint = ModelCheckpoint(
