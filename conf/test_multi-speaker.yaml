@@ -110,10 +110,10 @@ exp_name: multi-speaker-test/
 num_workers: 8
 gpus: 2
 slurm_job_id: 1
-train: true
+train: false
 log_wandb: false
 infer_path: ${code_root_dir}/predict/model_avg_last5_cncvs_multi-speaker.json
-ckpt_path: null
+ckpt_path: ${code_root_dir}/pretrained_models/model_avg_last5_cncvs_multi-speaker.pth
 transfer_frontend: false
 remove_ctc: false
 infer_ckpt_path: ${code_root_dir}/pretrained_models/model_avg_last5_cncvs_multi-speaker.pth

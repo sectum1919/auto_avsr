@@ -36,10 +36,7 @@ def main(cfg: DictConfig) -> None:
     callbacks = [checkpoint, lr_monitor]
 
     # Configure logger
-    if cfg.log_wandb:
-        logger = hydra.utils.instantiate(cfg.logger)
-    else:
-        logger = TensorBoardLogger(save_dir='tblog', name=cfg.logger.name)
+    logger = TensorBoardLogger(save_dir='tblog', name=cfg.logger.name)
 
     # Set modules and trainer
     modelmodule = ModelModule(cfg)

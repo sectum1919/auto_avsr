@@ -1,15 +1,20 @@
 # fill the blank and run
-DOWNLOAD_DATA_PATH=
-DOWNLOAD_LANDMARK_PATH=
-TARGET_DATA_PATH=
-DATASET_NAME=
-SPLIT=
+# DOWNLOAD_DATA_PATH=
+# DOWNLOAD_LANDMARK_PATH=
+# TARGET_DATA_PATH=
+# DATASET_NAME=
+# SPLIT=
 # for example:
 # DOWNLOAD_DATA_PATH='/data/CNVSRC/'
 # DOWNLOAD_LANDMARK_PATH='/data/CNVSRC_landmarks/'
 # TARGET_DATA_PATH='/data/CNVSRC_lips/'
 # DATASET_NAME='multi-speaker'
 # SPLIT='valid'
+DOWNLOAD_DATA_PATH='/work101/cchen/data/CNVSRC/'
+DOWNLOAD_LANDMARK_PATH='/work101/cchen/data/CNVSRC_landmarks/'
+TARGET_DATA_PATH='/work101/cchen/data/CNVSRC_lips/'
+DATASET_NAME='multi-speaker'
+SPLIT='valid'
 CODE_ROOT_PATH=$(dirname "$PWD")
 
 
