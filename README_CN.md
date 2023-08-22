@@ -113,7 +113,7 @@ python main.py
 
 ## Model zoo
 
-The table below contains cER on the validset of their own task.
+The table below contains CER on the validset of their own task.
 
 |       Training Data       |   CER  | URL        | 
 |:-------------------------:|:------:|:-----------|

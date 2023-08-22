@@ -91,6 +91,13 @@ Taking `cncvs` as an example:
 
 ### Training from a pre-trained model
 
+The configuration file [train_multi-speaker.yaml](conf/train_multi-speaker.yaml) provides an example configuration for fine-tuning a model pretrained on CN-CVS.
+
+The `ckpt_path` in the configuration file specifies the path of the pretrained model. The `remove_ctc` option indicates whether to use the classification layer of the pretrained model.
+
+```Shell
+python main.py
+```
 
 ### Training from scratch through curriculum learning
 
