@@ -1,8 +1,8 @@
-<h1 align="center">CNVSRC Baseline</h1>
+<h1 align="center">CNVSRC2023 基线系统</h1>
 
 ## 简介
 
-本仓库是CNVSRC挑战赛的baseline代码。
+本仓库是CNVSRC2023挑战赛的基线系统代码。
 
 本仓库的代码源自LRS3数据集上的SOTA方法[mpc001/auto_avsr](https://github.com/mpc001/auto_avsr)。我们添加了一些配置文件以使用此代码在CN-CVS和本次挑战赛各任务中提供的数据集上进行训练。此外，我们删除了部分运行此baseline时暂不需要的代码并修改了部分功能的实现方式。
 
