@@ -2,9 +2,9 @@
 We provide this pipeline to extract lip region videos from the provided video files and facelandmark files.
 Please follow the steps below to download and preprocess the data.
 
-1. Download the required dataset from the competition website.
+1. Download the required dataset from the CNVSRC2023 website.
 
-2. Download the corresponding facial landmark files from the competition website.
+2. Download the corresponding facial landmark files from the CNVSRC2023 website.
 
 3. Modify the data paths in `run.sh` and execute `sh run.sh`.
 
@@ -19,8 +19,8 @@ python crop_lip_video.py \
 
 The parameters for `crop_lip_video.py`` are as follows:
 
-- `src`: The path to the downloaded and extracted dataset folder.
-- `dst`: The target storage path must not be the same as src, the processed data will have the same directory structure as src.
+- `src`: The path to the downloaded dataset folder.
+- `dst`: The target storage path of the processed video files, must not be the same as `src`, which will have the same structure as `src`.
 - `csv`: The `.csv` file containing the path of videos to be processed, refer to [../data/multi-speaker/train.csv](../data/multi-speaker/train.csv).
 - `landmarks`: The path to the downloaded and extracted facial landmark folder.
 - `worker`: The number of threads used for multi-threaded processing.
