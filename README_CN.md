@@ -115,7 +115,7 @@ python main.py
 
 下面的表格列出了各个模型在各自任务上的CER。
 
-可以从 [huffingface](https://huggingface.co/DataOceanAI/CNVSRC2023Baseline) 或 [modelscope](https://www.modelscope.cn/speechoceanadmin/CNVSRC2023Baseline) 下载模型文件。
+可以从 [huggingface](https://huggingface.co/DataOceanAI/CNVSRC2023Baseline) 或 [modelscope](https://www.modelscope.cn/speechoceanadmin/CNVSRC2023Baseline) 下载模型文件。
 
 |       Training Data       |   CER  | File Name                                |
 |:-------------------------:|:------:|:-----------------------------------------|
