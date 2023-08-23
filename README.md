@@ -123,7 +123,7 @@ We prefer using `predict.py` to observe the real-time output text.
 
 The table below contains CER on the validset of their own task.
 
-Download model files from [huffingface](https://huggingface.co/DataOceanAI/CNVSRC2023Baseline) or [modelscope](https://www.modelscope.cn/speechoceanadmin/CNVSRC2023Baseline)。
+Download model files from [huggingface](https://huggingface.co/DataOceanAI/CNVSRC2023Baseline) or [modelscope](https://www.modelscope.cn/speechoceanadmin/CNVSRC2023Baseline)。
 
 |       Training Data       |   CER  | File Name                                |
 |:-------------------------:|:------:|:-----------------------------------------|
