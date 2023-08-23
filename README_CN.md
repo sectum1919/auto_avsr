@@ -113,13 +113,16 @@ python main.py
 
 ## Model zoo
 
-The table below contains CER on the validset of their own task.
+下面的表格列出了各个模型在各自任务上的CER。
 
-|       Training Data       |   CER  | URL        | 
-|:-------------------------:|:------:|:-----------|
-| CN-CVS                    |   /    |            |
-| CN-CVS + Multi-speaker    | 58.42% |            |
-| CN-CVS + Single-speaker   | 46.01% |            |
+可以从 [huffingface](https://huggingface.co/DataOceanAI/CNVSRC2023Baseline) 或 [modelscope](https://www.modelscope.cn/speechoceanadmin/CNVSRC2023Baseline) 下载模型文件。
+
+|       Training Data       |   CER  | File Name                                |
+|:-------------------------:|:------:|:-----------------------------------------|
+| CN-CVS (<4s)              |   /    | model_avg_14_23_cncvs_4s.pth             |
+| CN-CVS (full)             |   /    | model_avg_last10_cncvs_4s_30s.pth        |
+| CN-CVS + Multi-speaker    | 58.42% | model_avg_last5_cncvs_multi-speaker.pth  |
+| CN-CVS + Single-speaker   | 46.01% | model_avg_last5_cncvs_single-speaker.pth |
 
 ## License
 
