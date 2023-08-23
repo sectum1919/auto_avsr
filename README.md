@@ -1,8 +1,8 @@
-<h1 align="center">CNVSRC Baseline</h1>
+<h1 align="center">CNVSRC 2023 Baseline</h1>
 
 ## Introduction
 
-This repository is the baseline code for the CNVSRC (CN-CVS Visual Speech Recognition Challenge).
+This repository is the baseline code for CNVSRC2023 (CN-CVS Visual Speech Recognition Challenge 2023).
 
 The code in this repository is based on the SOTA method [mpc001/auto_avsr](https://github.com/mpc001/auto_avsr) on the LRS3 dataset. We have added some configuration files to run this code on CN-CVS and the datasets provided in this challenge. Additionally, we have removed some code that is not needed for running this baseline and modified the implementation of some functionalities.
 
@@ -50,7 +50,7 @@ Please modify the specified `yaml` configuration file in `main.py` to select the
 
 The [conf](conf/) folder lists the configuration files required for this baseline.
 
-Before running any training or testing, please make sure to modify the `code_root_dir` and `data_root_dir` in the corresponding `yaml`` file to **the path of this repository** and **the path where the dataset is located**, respectively.
+Before running any training or testing, please make sure to modify the `code_root_dir` and `data_root_dir` in the corresponding `yaml` file to **the path of this repository** and **the path where the dataset is located**, respectively.
 
 `data.dataset` specifies the path of the dataset and the path of the `.csv` files.
 
