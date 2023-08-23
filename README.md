@@ -123,11 +123,14 @@ We prefer using `predict.py` to observe the real-time output text.
 
 The table below contains CER on the validset of their own task.
 
-|       Training Data       |   CER  | URL        | 
-|:-------------------------:|:------:|:-----------|
-| CN-CVS                    |   /    |            |
-| CN-CVS + Multi-speaker    | 58.42% |            |
-| CN-CVS + Single-speaker   | 46.01% |            |
+Download model files from [huffingface](https://huggingface.co/DataOceanAI/CNVSRC2023Baseline) or [modelscope](https://www.modelscope.cn/speechoceanadmin/CNVSRC2023Baseline)。
+
+|       Training Data       |   CER  | File Name                                |
+|:-------------------------:|:------:|:-----------------------------------------|
+| CN-CVS (<4s)              |   /    | model_avg_14_23_cncvs_4s.pth             |
+| CN-CVS (full)             |   /    | model_avg_last10_cncvs_4s_30s.pth        |
+| CN-CVS + Multi-speaker    | 58.42% | model_avg_last5_cncvs_multi-speaker.pth  |
+| CN-CVS + Single-speaker   | 46.01% | model_avg_last5_cncvs_single-speaker.pth |
 
 ## License
 
